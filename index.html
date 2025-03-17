@@ -1,109 +1,1132 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kengrean - Korean English Quiz Game</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <!-- Animated background elements -->
-    <div class="bubble-container">
-        <div class="bubble bubble-1"></div>
-        <div class="bubble bubble-2"></div>
-        <div class="bubble bubble-3"></div>
-        <div class="bubble bubble-4"></div>
-        <div class="bubble bubble-5"></div>
-    </div>
-    
-    <div class="container">
-        <header>
-            <h1 class="game-title">Kengrean</h1>
-            <div class="subtitle">Korean-English Learning Game</div>
-        </header>
-        
-        <div id="setup-screen">
-            <div class="game-options">
-                <div class="option-group">
-                    <div class="option-title">Language Mode</div>
-                    <div class="btn-group">
-                        <button id="mode-korean" class="mode-btn active">Korean → English</button>
-                        <button id="mode-english" class="mode-btn">English → Korean</button>
-                    </div>
-                </div>
-                
-                <div class="option-group">
-                    <div class="option-title">Game Mode</div>
-                    <div class="btn-group">
-                        <button id="game-endless" class="game-btn active">Endless</button>
-                        <button id="game-timed" class="game-btn">Time Trial</button>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="categories-section">
-                <h2>Select Categories</h2>
-                <div class="category-controls">
-                    <button id="select-all" class="control-btn">Select All</button>
-                    <button id="deselect-all" class="control-btn">Deselect All</button>
-                </div>
-                <div class="categories-grid" id="categories-container">
-                    <!-- Categories will be populated here dynamically -->
-                    <div class="category-item selected" data-category="all">
-                        <div class="category-bubble">All Categories</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="text-center">
-                <button id="start-game" class="start-btn">Start Quiz!</button>
-            </div>
-        </div>
-        
-        <div id="game-screen" class="game-area">
-            <div class="game-header">
-                <div class="score-display">Score: <span id="score">0</span></div>
-                <div class="time-display" id="time-display">Time: <span id="time">60</span>s</div>
-            </div>
-            
-            <div class="question-area">
-                <div class="word-display" id="current-word">안녕하세요</div>
-                <button class="play-sound" id="play-sound">
-                    <span class="sound-icon">🔊</span> Play Sound
-                </button>
-            </div>
-            
-            <div class="answers-grid" id="answers-container">
-                <!-- Answer options will be populated here -->
-            </div>
-        </div>
-        
-        <div id="results-screen" class="results-area">
-            <h2 class="results-header">Quiz Results</h2>
-            
-            <div class="results-stats">
-                <div class="stat-item">
-                    <div class="stat-value" id="final-score">0</div>
-                    <div class="stat-label">Final Score</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="accuracy">0%</div>
-                    <div class="stat-label">Accuracy</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="correct-answers">0</div>
-                    <div class="stat-label">Correct Answers</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="total-questions">0</div>
-                    <div class="stat-label">Total Questions</div>
-                </div>
-            </div>
-            
-            <button id="play-again" class="play-again-btn">Play Again</button>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
-</body>
-</html>
+ <html lang="en">
+ <head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Korean Characters Game</title>
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+   <style>
+     /* Global Styles */
+     :root {
+       --primary: #5c6bc0;
+       --secondary: #ff7043;
+       --accent: #42a5f5;
+       --correct: #66bb6a;
+       --incorrect: #ef5350;
+       --dark: #303f9f;
+       --light: #e8eaf6;
+       --white: #ffffff;
+       --text-dark: #263238;
+       --text-light: #eceff1;
+       --shadow: 0 4px 6px rgba(0,0,0,0.1);
+       --transition: all 0.3s ease;
+     }
+     
+     * {
+       margin: 0;
+       padding: 0;
+       box-sizing: border-box;
+     }
+     
+     body {
+       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+       background: linear-gradient(135deg, #e0e8ff 0%, #d4e4ff 100%);
+       min-height: 100vh;
+       display: flex;
+       justify-content: center;
+       align-items: center;
+       color: var(--text-dark);
+       padding: 5px;
+     }
+     
+     .container {
+       width: 90%;
+       max-width: 800px;
+       background: var(--white);
+       border-radius: 16px;
+       box-shadow: var(--shadow);
+       padding: 1rem;
+       transition: var(--transition);
+       position: relative;
+       overflow: hidden;
+     }
+     
+     h1, h2, h3 {
+       text-align: center;
+       color: var(--primary);
+     }
+     
+     h1 {
+       margin-bottom: 0.5rem;
+       font-size: 2.2rem;
+       background: linear-gradient(45deg, var(--primary), var(--accent));
+       -webkit-background-clip: text;
+       background-clip: text;
+       color: transparent;
+     }
+     
+     /* Menu Styles */
+     .menu {
+       text-align: center;
+     }
+     
+     .menu-buttons {
+       display: flex;
+       flex-wrap: wrap;
+       justify-content: center;
+       gap: 1rem;
+       margin: 1rem 0;
+     }
+     
+     .menu-btn {
+       flex: 1 1 200px;
+       background: var(--primary);
+       color: var(--white);
+       border: none;
+       padding: 0.8rem;
+       border-radius: 8px;
+       font-size: 1.1rem;
+       cursor: pointer;
+       transition: var(--transition);
+       box-shadow: var(--shadow);
+       display: flex;
+       flex-direction: column;
+       align-items: center;
+       justify-content: center;
+       gap: 0.5rem;
+     }
+     
+     .menu-btn:hover {
+       transform: translateY(-5px);
+       box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+       background: var(--dark);
+     }
+     
+     .menu-btn i {
+       font-size: 1.5rem;
+     }
+     
+     /* Game Screen Styles */
+     .game-screen {
+       display: none;
+     }
+     
+     .game-header {
+       display: flex;
+       justify-content: space-between;
+       align-items: center;
+       margin-bottom: 1rem;
+       padding-bottom: 0.5rem;
+       border-bottom: 2px solid var(--light);
+     }
+     
+     .selectors {
+       display: flex;
+       flex-wrap: wrap;
+       gap: 1rem;
+       margin: 1rem 0;
+       justify-content: center;
+     }
+     
+     .selector-group {
+       display: flex;
+       flex-direction: column;
+       align-items: center;
+       gap: 0.5rem;
+     }
+     
+     .selector-group label {
+       font-size: 1rem;
+       font-weight: bold;
+       color: var(--primary);
+     }
+     
+     .type-selector,
+     .difficulty-selector {
+       display: flex;
+       gap: 0.5rem;
+     }
+     
+     .type-btn,
+     .difficulty-btn {
+       background: var(--light);
+       color: var(--text-dark);
+       border: none;
+       padding: 0.5rem 0.8rem;
+       border-radius: 20px;
+       cursor: pointer;
+       transition: var(--transition);
+       font-size: 0.95rem;
+     }
+     
+     .type-btn.active,
+     .difficulty-btn.active {
+       background: var(--primary);
+       color: var(--white);
+     }
+     
+     .stats {
+       background: var(--light);
+       padding: 0.5rem 1rem;
+       border-radius: 8px;
+       display: flex;
+       justify-content: space-between;
+       flex-wrap: wrap;
+       gap: 0.5rem;
+       margin-bottom: 0.8rem;
+     }
+     
+     .stat {
+       display: flex;
+       flex-direction: column;
+       align-items: center;
+     }
+     
+     .stat-value {
+       font-size: 1.25rem;
+       font-weight: bold;
+       color: var(--primary);
+     }
+     
+     .timer {
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       gap: 0.5rem;
+       margin-bottom: 0.8rem;
+       font-size: 1.25rem;
+       color: var(--secondary);
+     }
+     
+     .timer-bar {
+       width: 100%;
+       height: 8px;
+       background: var(--light);
+       border-radius: 5px;
+       overflow: hidden;
+       margin-top: 0.3rem;
+     }
+     
+     .timer-fill {
+       height: 100%;
+       background: var(--secondary);
+       width: 100%;
+       transition: width linear;
+     }
+     
+     .letter-display {
+       position: relative;
+       height: 150px;
+       display: flex;
+       justify-content: center;
+       align-items: center;
+       margin-bottom: 1rem;
+       border-radius: 16px;
+       background: linear-gradient(135deg, var(--light) 0%, rgba(232, 234, 246, 0.8) 100%);
+       overflow: hidden;
+     }
+     
+     .letter {
+       font-size: 100px;
+       font-weight: bold;
+       color: var(--primary);
+       text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+       transition: transform 0.3s ease, opacity 0.3s ease;
+     }
+     
+     .letter.animate-in {
+       animation: bounceIn 0.6s ease;
+     }
+     
+     .letter.animate-out {
+       animation: bounceOut 0.6s ease;
+     }
+     
+     @keyframes bounceIn {
+       0% { transform: scale(0.3); opacity: 0; }
+       50% { transform: scale(1.1); }
+       70% { transform: scale(0.9); }
+       100% { transform: scale(1); opacity: 1; }
+     }
+     
+     @keyframes bounceOut {
+       0% { transform: scale(1); opacity: 1; }
+       20% { transform: scale(1.1); }
+       100% { transform: scale(0.3); opacity: 0; }
+     }
+     
+     .options {
+       display: grid;
+       grid-template-columns: repeat(3, 1fr);
+       gap: 0.8rem;
+       margin-bottom: 1rem;
+     }
+     
+     .option-btn {
+       background: var(--light);
+       color: var(--text-dark);
+       border: none;
+       padding: 0.75rem;
+       border-radius: 8px;
+       font-size: 1rem;
+       cursor: pointer;
+       transition: var(--transition);
+       box-shadow: var(--shadow);
+     }
+     
+     .option-btn:hover {
+       transform: translateY(-3px);
+       box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+     }
+     
+     .option-btn.correct {
+       background: var(--correct);
+       color: var(--white);
+     }
+     
+     .option-btn.incorrect {
+       background: var(--incorrect);
+       color: var(--white);
+     }
+     
+     .controls {
+       display: flex;
+       justify-content: center;
+       gap: 1rem;
+       margin-top: 1rem;
+     }
+     
+     .control-btn {
+       background: var(--accent);
+       color: var(--white);
+       border: none;
+       padding: 0.75rem 1.5rem;
+       border-radius: 8px;
+       font-size: 1rem;
+       cursor: pointer;
+       transition: var(--transition);
+       display: flex;
+       align-items: center;
+       gap: 0.5rem;
+     }
+     
+     .control-btn:hover {
+       background: var(--dark);
+     }
+     
+     /* Game Over Screen */
+     .game-over {
+       display: none;
+       text-align: center;
+     }
+     
+     .results {
+       margin: 1rem 0;
+       padding: 1rem;
+       background: var(--light);
+       border-radius: 16px;
+     }
+     
+     .results h2 {
+       margin-bottom: 1rem;
+       color: var(--primary);
+     }
+     
+     .result-stat {
+       display: flex;
+       justify-content: space-between;
+       padding: 0.75rem 0;
+       border-bottom: 1px solid rgba(0,0,0,0.1);
+     }
+     
+     .result-label {
+       font-weight: bold;
+     }
+     
+     .result-value {
+       font-size: 1.1rem;
+     }
+     
+     .accuracy-bar {
+       height: 20px;
+       background: var(--light);
+       border-radius: 10px;
+       margin: 1rem 0;
+       overflow: hidden;
+       position: relative;
+     }
+     
+     .accuracy-fill {
+       height: 100%;
+       background: var(--correct);
+       border-radius: 10px;
+     }
+     
+     /* Message display */
+     .message {
+       position: fixed;
+       top: 50%;
+       left: 50%;
+       transform: translate(-50%, -50%);
+       background: rgba(0, 0, 0, 0.8);
+       color: white;
+       padding: 1rem 2rem;
+       border-radius: 8px;
+       z-index: 100;
+       opacity: 0;
+       visibility: hidden;
+       transition: all 0.3s ease;
+     }
+     
+     .message.show {
+       opacity: 1;
+       visibility: visible;
+     }
+     
+     /* Confetti effect */
+     .confetti {
+       position: absolute;
+       width: 10px;
+       height: 10px;
+       background-color: var(--primary);
+       opacity: 0;
+     }
+     
+     /* Modal styles */
+     .modal {
+       position: fixed;
+       top: 0;
+       left: 0;
+       width: 100%;
+       height: 100%;
+       background: rgba(0, 0, 0, 0.7);
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       z-index: 1000;
+     }
+     
+     .modal-content {
+       background: var(--white);
+       padding: 2rem;
+       border-radius: 16px;
+       width: 90%;
+       max-width: 500px;
+       box-shadow: var(--shadow);
+     }
+     
+     .modal-content h2 {
+       margin: 0.5rem 0 1rem;
+       color: var(--primary);
+     }
+     
+     .modal-options {
+       display: flex;
+       gap: 0.5rem;
+       margin-bottom: 1.5rem;
+       flex-wrap: wrap;
+     }
+     
+     .modal-btn {
+       flex: 1;
+       background: var(--light);
+       color: var(--text-dark);
+       border: none;
+       padding: 0.75rem 1rem;
+       border-radius: 8px;
+       font-size: 1rem;
+       cursor: pointer;
+       transition: var(--transition);
+     }
+     
+     .modal-btn.active {
+       background: var(--primary);
+       color: var(--white);
+     }
+     
+     .modal-start-btn {
+       width: 100%;
+       background: var(--accent);
+       color: var(--white);
+       border: none;
+       padding: 1rem;
+       border-radius: 8px;
+       font-size: 1.2rem;
+       cursor: pointer;
+       transition: var(--transition);
+     }
+     
+     .modal-start-btn:hover {
+       background: var(--dark);
+     }
+     
+     /* Responsive design */
+     @media (max-width: 768px) {
+       .container {
+         width: 95%;
+         padding: 1rem;
+       }
+       
+       .menu-buttons {
+         flex-direction: column;
+       }
+       
+       .menu-btn {
+         flex: 1 1 auto;
+         margin-bottom: 0.5rem;
+       }
+       
+       .selectors {
+         flex-direction: column;
+       }
+       
+       .letter {
+         font-size: 80px;
+       }
+       
+       .game-header {
+         flex-direction: column;
+         gap: 0.5rem;
+       }
+       
+       .controls {
+         flex-wrap: wrap;
+         justify-content: center;
+       }
+       
+       .option-btn {
+         padding: 0.5rem;
+         font-size: 0.9rem;
+       }
+     }
+     
+     /* For extremely small screens */
+     @media (max-width: 350px) {
+       .options {
+         grid-template-columns: 1fr;
+       }
+       
+       .type-selector,
+       .difficulty-selector {
+         flex-wrap: wrap;
+         justify-content: center;
+       }
+     }
+   </style>
+ </head>
+ <body>
+   <div class="container">
+     <!-- Main Menu -->
+     <div class="menu" id="menu-screen">
+       <h1>Korean Characters Game</h1>
+       <p>Test your knowledge of Korean characters!</p>
+       
+       <div class="selectors">
+         <div class="selector-group">
+           <label>Character Type:</label>
+           <div class="type-selector">
+             <button class="type-btn active" data-type="consonants">Consonants</button>
+             <button class="type-btn" data-type="vowels">Vowels</button>
+             <button class="type-btn" data-type="both">Both</button>
+           </div>
+         </div>
+         
+         <div class="selector-group">
+           <label>Difficulty:</label>
+           <div class="difficulty-selector">
+             <button class="difficulty-btn active" data-difficulty="easy">Easy</button>
+             <button class="difficulty-btn" data-difficulty="medium">Medium</button>
+             <button class="difficulty-btn" data-difficulty="hard">Hard</button>
+           </div>
+         </div>
+       </div>
+       
+       <div class="menu-buttons">
+         <button class="menu-btn" id="practice-btn">
+           <i class="fas fa-book"></i>
+           Practice Mode
+         </button>
+         <button class="menu-btn" id="timed-btn">
+           <i class="fas fa-stopwatch"></i>
+           Timed Challenge (1 min)
+         </button>
+         <button class="menu-btn" id="endless-btn">
+           <i class="fas fa-infinity"></i>
+           Endless Mode
+         </button>
+       </div>
+     </div>
+     
+     <!-- Game Screen -->
+     <div class="game-screen" id="game-screen">
+       <div class="game-header">
+         <h2 id="game-mode-title">Practice Mode</h2>
+         <button class="control-btn" id="back-to-menu">
+           <i class="fas fa-arrow-left"></i>
+           Menu
+         </button>
+       </div>
+       
+       <div class="stats">
+         <div class="stat">
+           <div class="stat-value" id="score">0</div>
+           <div class="stat-label">Score</div>
+         </div>
+         <div class="stat">
+           <div class="stat-value" id="correct">0</div>
+           <div class="stat-label">Correct</div>
+         </div>
+         <div class="stat">
+           <div class="stat-value" id="incorrect">0</div>
+           <div class="stat-label">Incorrect</div>
+         </div>
+         <div class="stat">
+           <div class="stat-value" id="accuracy">0%</div>
+           <div class="stat-label">Accuracy</div>
+         </div>
+       </div>
+       
+       <div class="timer">
+         <i class="fas fa-stopwatch"></i>
+         <span id="timer-value">10</span>s
+         <div class="timer-bar">
+           <div class="timer-fill" id="timer-fill"></div>
+         </div>
+       </div>
+       
+       <div class="letter-display">
+         <div class="letter animate-in" id="letterDisplay">?</div>
+       </div>
+       
+       <div class="options" id="optionsContainer">
+         <!-- Option buttons will be dynamically inserted here -->
+       </div>
+       
+       <div class="controls">
+         <button class="control-btn" id="sound-btn">
+           <i class="fas fa-volume-up"></i>
+           Sound: On
+         </button>
+         <button class="control-btn" id="hint-btn">
+           <i class="fas fa-lightbulb"></i>
+           Hint
+         </button>
+       </div>
+     </div>
+     
+     <!-- Game Over Screen -->
+     <div class="game-over" id="game-over">
+       <h1>Game Over!</h1>
+       
+       <div class="results">
+         <h2>Your Results</h2>
+         
+         <div class="result-stat">
+           <div class="result-label">Total Score:</div>
+           <div class="result-value" id="final-score">0</div>
+         </div>
+         
+         <div class="result-stat">
+           <div class="result-label">Correct Answers:</div>
+           <div class="result-value" id="final-correct">0</div>
+         </div>
+         
+         <div class="result-stat">
+           <div class="result-label">Incorrect Answers:</div>
+           <div class="result-value" id="final-incorrect">0</div>
+         </div>
+         
+         <div class="result-stat">
+           <div class="result-label">Accuracy:</div>
+           <div class="result-value" id="final-accuracy">0%</div>
+         </div>
+         
+         <h3>Accuracy</h3>
+         <div class="accuracy-bar">
+           <div class="accuracy-fill" id="accuracy-fill" style="width: 0%"></div>
+         </div>
+       </div>
+       
+       <div class="controls">
+         <button class="control-btn" id="play-again">
+           <i class="fas fa-redo"></i>
+           Play Again
+         </button>
+         <button class="control-btn" id="return-menu">
+           <i class="fas fa-home"></i>
+           Main Menu
+         </button>
+       </div>
+     </div>
+     
+     <!-- Message Display -->
+     <div class="message" id="message"></div>
+   </div>
+   
+   <script>
+     // Base URL for audio files
+     const baseAudioURL = "https://90daykoreanaudiobytes.s3-us-west-1.amazonaws.com/";
+     
+     // Data structure for Korean characters
+     const koreanData = {
+       consonants: [
+         // Basic Consonants
+         { letter: "ㄱ", english: "g/k", audio: baseAudioURL + "audio-giyeok.mp3", name: "giyeok" },
+         { letter: "ㄴ", english: "n", audio: baseAudioURL + "audio-nieun.mp3", name: "nieun" },
+         { letter: "ㄷ", english: "d/t", audio: baseAudioURL + "audio-digeut.mp3", name: "digeut" },
+         { letter: "ㄹ", english: "r/l", audio: baseAudioURL + "audio-rieul.mp3", name: "rieul" },
+         { letter: "ㅁ", english: "m", audio: baseAudioURL + "audio-mieum.mp3", name: "mieum" },
+         { letter: "ㅂ", english: "b/p", audio: baseAudioURL + "audio-bieup.mp3", name: "bieup" },
+         { letter: "ㅅ", english: "s", audio: baseAudioURL + "audio-siot.mp3", name: "siot" },
+         { letter: "ㅇ", english: "ng", audio: baseAudioURL + "audio-ieung.mp3", name: "ieung" },
+         { letter: "ㅈ", english: "j/ch", audio: baseAudioURL + "audio-jieut.mp3", name: "jieut" },
+         { letter: "ㅎ", english: "h", audio: baseAudioURL + "audio-hieut.mp3", name: "hieut" },
+         // Tense / Double Consonants
+         { letter: "ㄲ", english: "kk", audio: baseAudioURL + "audio-ssanggiyeok.mp3", name: "ssanggiyeok" },
+         { letter: "ㄸ", english: "tt", audio: baseAudioURL + "audio-ssangdigeut.mp3", name: "ssangdigeut" },
+         { letter: "ㅃ", english: "pp", audio: baseAudioURL + "audio-ssangbieup.mp3", name: "ssangbieup" },
+         { letter: "ㅆ", english: "ss", audio: baseAudioURL + "audio-ssangsiot.mp3", name: "ssangsiot" },
+         { letter: "ㅉ", english: "jj", audio: baseAudioURL + "audio-ssangjieut.mp3", name: "ssangjieut" },
+         // Aspirated Consonants
+         { letter: "ㅊ", english: "ch", audio: baseAudioURL + "audio-chieut.mp3", name: "chieut" },
+         { letter: "ㅋ", english: "k", audio: baseAudioURL + "audio-kieuk.mp3", name: "kieuk" },
+         { letter: "ㅌ", english: "t", audio: baseAudioURL + "audio-tieut.mp3", name: "tieut" },
+         { letter: "ㅍ", english: "p", audio: baseAudioURL + "audio-pieup.mp3", name: "pieup" }
+       ],
+       vowels: [
+         { letter: "ㅏ", english: "a", audio: baseAudioURL + "audio-a.mp3", name: "a" },
+         { letter: "ㅓ", english: "eo", audio: baseAudioURL + "audio-eo.mp3", name: "eo" },
+         { letter: "ㅗ", english: "o", audio: baseAudioURL + "audio-o.mp3", name: "o" },
+         { letter: "ㅜ", english: "u", audio: baseAudioURL + "audio-u.mp3", name: "u" },
+         { letter: "ㅡ", english: "eu", audio: baseAudioURL + "audio-eu.mp3", name: "eu" },
+         { letter: "ㅣ", english: "i", audio: baseAudioURL + "audio-i.mp3", name: "i" },
+         { letter: "ㅑ", english: "ya", audio: baseAudioURL + "audio-ya.mp3", name: "ya" },
+         { letter: "ㅕ", english: "yeo", audio: baseAudioURL + "audio-yeo.mp3", name: "yeo" },
+         { letter: "ㅛ", english: "yo", audio: baseAudioURL + "audio-yo.mp3", name: "yo" },
+         { letter: "ㅠ", english: "yu", audio: baseAudioURL + "audio-yu.mp3", name: "yu" },
+         { letter: "ㅐ", english: "ae", audio: baseAudioURL + "audio-ae.mp3", name: "ae" },
+         { letter: "ㅔ", english: "e", audio: baseAudioURL + "audio-e.mp3", name: "e" },
+         { letter: "ㅒ", english: "yae", audio: baseAudioURL + "audio-yae.mp3", name: "yae" },
+         { letter: "ㅖ", english: "ye", audio: baseAudioURL + "audio-ye.mp3", name: "ye" },
+         { letter: "ㅘ", english: "wa", audio: baseAudioURL + "audio-wa.mp3", name: "wa" },
+         { letter: "ㅙ", english: "wae", audio: baseAudioURL + "audio-wae.mp3", name: "wae" },
+         { letter: "ㅝ", english: "wo", audio: baseAudioURL + "audio-wo.mp3", name: "wo" },
+         { letter: "ㅞ", english: "we", audio: baseAudioURL + "audio-we.mp3", name: "we" },
+         { letter: "ㅚ", english: "oe", audio: baseAudioURL + "audio-oe.mp3", name: "oe" },
+         { letter: "ㅟ", english: "wi", audio: baseAudioURL + "audio-wi.mp3", name: "wi" },
+         { letter: "ㅢ", english: "eui", audio: baseAudioURL + "audio-eui.mp3", name: "eui" }
+       ]
+     };
+     
+     // Game state variables
+     let gameState = {
+       currentMode: null,
+       currentType: 'consonants',
+       currentDifficulty: 'easy',
+       score: 0,
+       correct: 0,
+       incorrect: 0,
+       accuracy: 0,
+       currentLetter: null,
+       timeLimit: 10, // seconds per question in Practice mode
+       timeRemaining: 10,
+       totalTime: 60, // 1 minute for timed mode
+       timerInterval: null,
+       soundEnabled: true,
+       gameActive: false
+     };
+     
+     // DOM Elements
+     const menuScreen = document.getElementById('menu-screen');
+     const gameScreen = document.getElementById('game-screen');
+     const gameOverScreen = document.getElementById('game-over');
+     const practiceBtn = document.getElementById('practice-btn');
+     const timedBtn = document.getElementById('timed-btn');
+     const endlessBtn = document.getElementById('endless-btn');
+     const backToMenuBtn = document.getElementById('back-to-menu');
+     const letterDisplay = document.getElementById('letterDisplay');
+     const optionsContainer = document.getElementById('optionsContainer');
+     const scoreDisplay = document.getElementById('score');
+     const correctDisplay = document.getElementById('correct');
+     const incorrectDisplay = document.getElementById('incorrect');
+     const accuracyDisplay = document.getElementById('accuracy');
+     const timerValue = document.getElementById('timer-value');
+     const timerFill = document.getElementById('timer-fill');
+     const soundBtn = document.getElementById('sound-btn');
+     const hintBtn = document.getElementById('hint-btn');
+     const finalScore = document.getElementById('final-score');
+     const finalCorrect = document.getElementById('final-correct');
+     const finalIncorrect = document.getElementById('final-incorrect');
+     const finalAccuracy = document.getElementById('final-accuracy');
+     const accuracyFill = document.getElementById('accuracy-fill');
+     const playAgainBtn = document.getElementById('play-again');
+     const returnMenuBtn = document.getElementById('return-menu');
+     const messageDisplay = document.getElementById('message');
+     const gameModeTitle = document.getElementById('game-mode-title');
+     
+     // Helper function: shuffle an array in-place
+     function shuffle(array) {
+       for (let i = array.length - 1; i > 0; i--) {
+         const j = Math.floor(Math.random() * (i + 1));
+         [array[i], array[j]] = [array[j], array[i]];
+       }
+       return array;
+     }
+     
+     // Function to play the associated audio if sound is enabled
+     function playAudio(url) {
+       if (!gameState.soundEnabled || !url) return;
+       const audio = new Audio(url);
+       audio.play();
+     }
+     
+     // Function to show a message
+     function showMessage(text, duration = 1500) {
+       messageDisplay.textContent = text;
+       messageDisplay.classList.add('show');
+       setTimeout(() => {
+         messageDisplay.classList.remove('show');
+       }, duration);
+     }
+     
+     // Update accuracy calculation
+     function updateAccuracy() {
+       const total = gameState.correct + gameState.incorrect;
+       gameState.accuracy = total > 0 ? Math.round((gameState.correct / total) * 100) : 0;
+     }
+     
+     // Timer functions
+     function startTimer(isTimedMode = false) {
+       clearInterval(gameState.timerInterval);
+       
+       if (isTimedMode) {
+         // For timed mode - count down from totalTime
+         gameState.timeRemaining = gameState.totalTime;
+         timerValue.textContent = gameState.timeRemaining;
+         
+         gameState.timerInterval = setInterval(() => {
+           gameState.timeRemaining--;
+           timerValue.textContent = gameState.timeRemaining;
+           timerFill.style.width = (gameState.timeRemaining / gameState.totalTime * 100) + '%';
+           
+           if (gameState.timeRemaining <= 0) {
+             clearInterval(gameState.timerInterval);
+             endGame();
+           }
+         }, 1000);
+       } else if (gameState.currentMode === 'practice') {
+         // For practice mode - count down from timeLimit for each question
+         gameState.timeRemaining = gameState.timeLimit;
+         timerValue.textContent = gameState.timeRemaining;
+         timerFill.style.width = '100%';
+         
+         gameState.timerInterval = setInterval(() => {
+           gameState.timeRemaining--;
+           timerValue.textContent = gameState.timeRemaining;
+           timerFill.style.width = (gameState.timeRemaining / gameState.timeLimit * 100) + '%';
+           
+           if (gameState.timeRemaining <= 0) {
+             clearInterval(gameState.timerInterval);
+             // Count as incorrect when time's up
+             gameState.incorrect++;
+             updateAccuracy();
+             
+             // Update displays
+             incorrectDisplay.textContent = gameState.incorrect;
+             accuracyDisplay.textContent = gameState.accuracy + '%';
+             
+             showMessage('Time\'s up! Counted as incorrect.');
+             nextQuestion();
+           }
+         }, 1000);
+       } else {
+         // For endless mode - no timer
+         timerValue.textContent = '--';
+         timerFill.style.width = '100%';
+       }
+     }
+     
+     // Function to stop the timer
+     function stopTimer() {
+       clearInterval(gameState.timerInterval);
+     }
+     
+     // Function to initialize the game
+     function initGame(mode) {
+       // Reset game state
+       gameState.currentMode = mode;
+       gameState.score = 0;
+       gameState.correct = 0;
+       gameState.incorrect = 0;
+       gameState.accuracy = 0;
+       gameState.gameActive = true;
+       
+       // Update UI
+       scoreDisplay.textContent = gameState.score;
+       correctDisplay.textContent = gameState.correct;
+       incorrectDisplay.textContent = gameState.incorrect;
+       accuracyDisplay.textContent = '0%';
+       
+       // Set game mode title
+       let modeName = '';
+       switch (mode) {
+         case 'practice':
+           modeName = 'Practice Mode';
+           break;
+         case 'timed':
+           modeName = 'Timed Challenge (1 min)';
+           break;
+         case 'endless':
+           modeName = 'Endless Mode';
+           break;
+       }
+       gameModeTitle.textContent = modeName;
+       
+       // Hide menu, show game
+       menuScreen.style.display = 'none';
+       gameScreen.style.display = 'block';
+       gameOverScreen.style.display = 'none';
+       
+       // Start the game
+       nextQuestion();
+       
+       // Start timer if timed mode
+       if (mode === 'timed') {
+         startTimer(true);
+       }
+     }
+     
+     // Function to get the current character data based on selected type
+     function getCurrentData() {
+       switch (gameState.currentType) {
+         case 'consonants':
+           return koreanData.consonants;
+         case 'vowels':
+           return koreanData.vowels;
+         case 'both':
+           return [...koreanData.consonants, ...koreanData.vowels];
+       }
+     }
+     
+     // Display the next question
+     function nextQuestion() {
+       if (!gameState.gameActive) return;
+       
+       // Clear options container
+       optionsContainer.innerHTML = '';
+       
+       // Animate letter out
+       letterDisplay.classList.remove('animate-in');
+       letterDisplay.classList.add('animate-out');
+       
+       setTimeout(() => {
+         // Get the current data based on selected type
+         const currentData = getCurrentData();
+         
+         // Pick a random letter
+         gameState.currentLetter = currentData[Math.floor(Math.random() * currentData.length)];
+         
+         // Set the letter
+         letterDisplay.textContent = gameState.currentLetter.letter;
+         letterDisplay.classList.remove('animate-out');
+         letterDisplay.classList.add('animate-in');
+         
+         // Play audio if available
+         playAudio(gameState.currentLetter.audio);
+         
+         // Prepare multiple choice options
+         let options = [gameState.currentLetter.english];
+         const remaining = currentData.filter(item => item.english !== gameState.currentLetter.english);
+         
+         // Determine number of options based on difficulty
+         let numOptions = 3; // Easy mode default
+         if (gameState.currentDifficulty === 'medium') {
+           numOptions = 6;
+         } else if (gameState.currentDifficulty === 'hard') {
+           numOptions = 9;
+         }
+         
+         // Add random options
+         while (options.length < numOptions && remaining.length > 0) {
+           const randomIndex = Math.floor(Math.random() * remaining.length);
+           const candidate = remaining[randomIndex].english;
+           
+           if (!options.includes(candidate)) {
+             options.push(candidate);
+             remaining.splice(randomIndex, 1);
+           }
+         }
+         
+         // Shuffle options
+         options = shuffle(options);
+         
+         // Create option buttons
+         options.forEach(option => {
+           const btn = document.createElement('button');
+           btn.className = 'option-btn';
+           btn.textContent = option;
+           btn.addEventListener('click', () => checkAnswer(option));
+           optionsContainer.appendChild(btn);
+         });
+         
+         // Start timer for practice mode
+         if (gameState.currentMode === 'practice') {
+           startTimer();
+         }
+       }, 300); // Wait for animation to complete
+     }
+     
+     // Check if the chosen answer is correct
+     function checkAnswer(selected) {
+       if (gameState.currentMode === 'practice') {
+         stopTimer();
+       }
+       
+       const isCorrect = selected === gameState.currentLetter.english;
+       
+       // Update stats
+       if (isCorrect) {
+         gameState.score += 10;
+         gameState.correct++;
+         showMessage('Correct! +10 points', 1000);
+         
+         // Create confetti effect
+         createConfetti();
+       } else {
+         gameState.incorrect++;
+         showMessage(`Incorrect. Correct answer: ${gameState.currentLetter.english}`, 1500);
+       }
+       
+       // Calculate accuracy
+       updateAccuracy();
+       
+       // Update displays
+       scoreDisplay.textContent = gameState.score;
+       correctDisplay.textContent = gameState.correct;
+       incorrectDisplay.textContent = gameState.incorrect;
+       accuracyDisplay.textContent = gameState.accuracy + '%';
+       
+       // Highlight correct/incorrect buttons
+       const optionButtons = document.querySelectorAll('.option-btn');
+       optionButtons.forEach(btn => {
+         if (btn.textContent === gameState.currentLetter.english) {
+           btn.classList.add('correct');
+         } else if (btn.textContent === selected && !isCorrect) {
+           btn.classList.add('incorrect');
+         }
+         
+         // Disable buttons
+         btn.disabled = true;
+       });
+       
+       // Proceed to next question after a delay
+       setTimeout(nextQuestion, 1500);
+     }
+     
+     // Function to end the game
+     function endGame() {
+       gameState.gameActive = false;
+       stopTimer();
+       
+       // Update final stats
+       finalScore.textContent = gameState.score;
+       finalCorrect.textContent = gameState.correct;
+       finalIncorrect.textContent = gameState.incorrect;
+       finalAccuracy.textContent = gameState.accuracy + '%';
+       accuracyFill.style.width = gameState.accuracy + '%';
+       
+       // Show game over screen
+       gameScreen.style.display = 'none';
+       gameOverScreen.style.display = 'block';
+     }
+     
+     // Function to create confetti effect
+     function createConfetti() {
+       const container = document.querySelector('.container');
+       const colors = ['#5c6bc0', '#ff7043', '#42a5f5', '#66bb6a', '#ffca28'];
+       
+       for (let i = 0; i < 50; i++) {
+         const confetti = document.createElement('div');
+         confetti.className = 'confetti';
+         confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+         confetti.style.left = Math.random() * 100 + '%';
+         confetti.style.top = -20 + 'px';
+         confetti.style.transform = 'rotate(' + Math.random() * 360 + 'deg)';
+         
+         container.appendChild(confetti);
+         
+         // Animate confetti
+         const animation = confetti.animate([
+           { transform: 'translate(0, 0) rotate(' + Math.random() * 360 + 'deg)', opacity: 1 },
+           { transform: 'translate(' + (Math.random() * 100 - 50) + 'px, ' + (300 + Math.random() * 200) + 'px) rotate(' + Math.random() * 360 + 'deg)', opacity: 0 }
+         ], {
+           duration: 1000 + Math.random() * 1000,
+           easing: 'cubic-bezier(0,0.2,0.8,1)'
+         });
+         
+         // Remove element after animation
+         animation.onfinish = () => {
+           confetti.remove();
+         };
+       }
+     }
+     
+     // Event listeners for game mode buttons
+     practiceBtn.addEventListener('click', () => initGame('practice'));
+     timedBtn.addEventListener('click', () => initGame('timed'));
+     endlessBtn.addEventListener('click', () => initGame('endless'));
+     
+     // Event listener for character type selector in main menu
+     document.querySelectorAll('.menu .type-btn').forEach(btn => {
+       btn.addEventListener('click', () => {
+         // Update active class
+         document.querySelectorAll('.menu .type-btn').forEach(b => b.classList.remove('active'));
+         btn.classList.add('active');
+         // Update current type
+         gameState.currentType = btn.dataset.type;
+       });
+     });
+     
+     // Event listener for difficulty selector in main menu
+     document.querySelectorAll('.menu .difficulty-btn').forEach(btn => {
+       btn.addEventListener('click', () => {
+         // Update active class
+         document.querySelectorAll('.menu .difficulty-btn').forEach(b => b.classList.remove('active'));
+         btn.classList.add('active');
+         // Update current difficulty
+         gameState.currentDifficulty = btn.dataset.difficulty;
+       });
+     });
+     
+     // Event listener for back to menu button
+     backToMenuBtn.addEventListener('click', () => {
+       gameState.gameActive = false;
+       stopTimer();
+       gameScreen.style.display = 'none';
+       menuScreen.style.display = 'block';
+     });
+     
+     // Event listeners for game over screen buttons
+     playAgainBtn.addEventListener('click', () => initGame(gameState.currentMode));
+     returnMenuBtn.addEventListener('click', () => {
+       gameOverScreen.style.display = 'none';
+       menuScreen.style.display = 'block';
+     });
+     
+     // Event listener for sound toggle
+     soundBtn.addEventListener('click', () => {
+       gameState.soundEnabled = !gameState.soundEnabled;
+       soundBtn.innerHTML = gameState.soundEnabled ? 
+         '<i class="fas fa-volume-up"></i> Sound: On' : 
+         '<i class="fas fa-volume-mute"></i> Sound: Off';
+     });
+     
+     // Event listener for hint button
+     hintBtn.addEventListener('click', () => {
+       if (gameState.currentLetter) {
+         showMessage(`This is "${gameState.currentLetter.name}"`, 2000);
+       }
+     });
+   </script>
+ </body>
+ </html>
